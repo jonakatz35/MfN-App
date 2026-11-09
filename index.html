@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MfN Study OS · Mission 1,0 — Universität Mannheim (HWS 2026)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. STICKY EXECUTIVE COMMAND HEADER
+       ======================================================================== -->
+  <header class="command-header" role="banner">
+    <div class="command-header-inner">
+      <!-- Brand Identity -->
+      <div class="brand-cluster">
+        <div class="brand-crest" aria-hidden="true">
+          <span class="crest-grade">1,0</span>
+          <span class="crest-sub">MfN OS</span>
+        </div>
+        <div class="brand-titles">
+          <h1>
+            MfN Study OS
+            <span class="brand-badge">HWS 2026 · Mission 1,0</span>
+          </h1>
+          <div class="brand-subtitle">
+            <span>Universität Mannheim · Lehrstuhl Prof. Dr. Florian Kraus</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dual-Countdown Cluster (Content-Deadline 11.12. & Klausur 18.12.) -->
+      <div class="countdown-cluster" aria-label="Klausur- und Content-Countdowns">
+        <div class="countdown-card primary-deadline" title="Harte Content-Deadline: Bis zum 11.12.2026 müssen alle 6 Kapitel gelernt und gechunkt sein!">
+          <div class="countdown-number tabular-nums" id="cdContentDays">32 T</div>
+          <div class="countdown-meta">
+            <span class="countdown-label">Content-Deadline (Prio 1)</span>
+            <span class="countdown-date" id="cdContentSub">Fr, 11.12.2026 · 100% Stoff</span>
+          </div>
+        </div>
+
+        <div class="countdown-card exam-deadline" title="Offizieller Klausurtermin inkl. 7-Tage-Revisionspuffer (11.12.–17.12.)">
+          <div class="countdown-number tabular-nums" id="cdExamDays">39 T</div>
+          <div class="countdown-meta">
+            <span class="countdown-label">Klausurtermin (+7T Puffer)</span>
+            <span class="countdown-date" id="cdExamSub">Fr, 18.12.2026 · 60 Min.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live 1,0 Readiness Gauge & Utilities -->
+      <div class="header-right">
+        <div class="readiness-pill" id="readinessHeaderBtn" title="Gewichteter 1,0-Readiness-Score (45% Systemwissen, 35% Quant-Drill, 20% R/F-Diagnostik)">
+          <svg class="radial-progress" viewBox="0 0 36 36" aria-hidden="true">
+            <circle class="radial-bg" cx="18" cy="18" r="15.5"></circle>
+            <circle class="radial-bar" id="headerRadialBar" cx="18" cy="18" r="15.5" stroke-dasharray="97.4" stroke-dashoffset="97.4"></circle>
+          </svg>
+          <div class="readiness-info">
+            <div class="readiness-top">
+              <span class="readiness-pct tabular-nums" id="headerReadinessPct">0%</span>
+              <span class="readiness-grade-tag tabular-nums" id="headerGradeForecast">Prognose: —</span>
+            </div>
+            <span class="readiness-sub">1,0-Readiness-Score</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="icon-btn" id="openBackupModalBtn" title="Fortschritt als JSON sichern oder wiederherstellen">
+            <span>⇄ Backup</span>
+          </button>
+          <button type="button" class="icon-btn" id="themeToggleBtn" title="Darstellung umschalten (Dark / Light Mode)">
+            <span id="themeToggleIcon">☀ Light</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. PRIMARY NAVIGATION BAR (5 TABS + SIMULATED DATE CONTROL)
+       ======================================================================== -->
+  <nav class="main-nav-bar" aria-label="Hauptnavigation">
+    <div class="main-nav-inner">
+      <div class="nav-tabs" role="tablist">
+        <button type="button" class="nav-tab active" role="tab" aria-selected="true" data-tab="cockpit">
+          <span>1 · Cockpit</span>
+          <span class="tab-weight">Übersicht</span>
+        </button>
+        <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab="masterplan">
+          <span>2 · 6-Wochen-Masterplan</span>
+          <span class="tab-weight">Pipeline</span>
+        </button>
+        <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab="quant">
+          <span>3 · Quant-Labor</span>
+          <span class="tab-weight">35%</span>
+        </button>
+        <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab="diagnostic">
+          <span>4 · R/F-Fallen & Skalen</span>
+          <span class="tab-weight">20%</span>
+        </button>
+        <button type="button" class="nav-tab" role="tab" aria-selected="false" data-tab="vault">
+          <span>5 · Chunking & Cases</span>
+          <span class="tab-weight">45%</span>
+        </button>
+      </div>
+
+      <div class="sim-date-control">
+        <label for="simDateInput">Planungsdatum:</label>
+        <input type="date" id="simDateInput" class="sim-date-input" value="2026-11-09" min="2026-11-01" max="2026-12-20" />
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       3. MAIN WORKSPACE CONTAINER
+       ======================================================================== -->
+  <main class="workspace-container">
+
+    <!-- ======================================================================
+         VIEW 1: EXECUTIVE COCKPIT (DASHBOARD)
+         ====================================================================== -->
+    <section id="view-cockpit" class="view-section active" role="tabpanel">
+      <div class="section-hero">
+        <div class="section-hero-left">
+          <div class="eyebrow">● STRATEGISCHES KOMMANDOZENTRUM · HWS 2026</div>
+          <h2>Mission 1,0: Klausur-Readiness & Wochen-Fokus</h2>
+          <p>
+            Dein Fortschritt wird automatisch lokal gespeichert und nach der realen MfN-Klausurarchitektur gewichtet:
+            <strong>45% Konzeptionelles Systemwissen & Case-Transfer</strong>,
+            <strong>35% Quantitative Aufgaben</strong> und
+            <strong>20% Methodische Präzision & Richtig/Falsch-Diagnostik</strong>.
+          </p>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" data-goto-tab="masterplan">
+            Zum aktuellen Wochen-Block →
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-Säulen-Readiness-Grid -->
+      <div class="pillars-grid">
+        <!-- Säule 1: 45% -->
+        <article class="pillar-card pillar-conceptual">
+          <div>
+            <div class="pillar-header">
+              <span class="pillar-badge">Säule 1 · Gewichtung 45%</span>
+              <span class="pillar-score-big tabular-nums" id="pillar1Score">0%</span>
+            </div>
+            <h3 class="pillar-title">Systemwissen, Pipeline & Cases</h3>
+            <p class="pillar-desc">
+              4-Step Justin Sung Pipeline (Scoping, 1-Seiten-Mindmap, RemNote-Encoding, Application), Grouped-Chunking-Listen & Case-Transfer.
+            </p>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="pillar1Bar" style="width: 0%"></div>
+            </div>
+            <div class="pillar-footer">
+              <span class="tabular-nums" id="pillar1Detail">0 / 0 Einheiten abgeschlossen</span>
+              <button type="button" class="link-btn" data-goto-tab="vault">Chunking & Cases →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Säule 2: 35% -->
+        <article class="pillar-card pillar-quant">
+          <div>
+            <div class="pillar-header">
+              <span class="pillar-badge">Säule 2 · Gewichtung 35%</span>
+              <span class="pillar-score-big tabular-nums" id="pillar2Score">0%</span>
+            </div>
+            <h3 class="pillar-title">Quant-Drill & Formel-Mastery</h3>
+            <p class="pillar-desc">
+              Alle 11 Rechenarchetypen (Markov, Statistik, Regression, Erfahrungskurve, Portfolios, Conjoint, PAF/Elastizität, Werbung, TKP, Gewinn/Logistik, SERVQUAL).
+            </p>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="pillar2Bar" style="width: 0%"></div>
+            </div>
+            <div class="pillar-footer">
+              <span class="tabular-nums" id="pillar2Detail">0 / 11 „Blind auf Zeit“</span>
+              <button type="button" class="link-btn" data-goto-tab="quant">Quant-Labor öffnen →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Säule 3: 20% -->
+        <article class="pillar-card pillar-diag">
+          <div>
+            <div class="pillar-header">
+              <span class="pillar-badge">Säule 3 · Gewichtung 20%</span>
+              <span class="pillar-score-big tabular-nums" id="pillar3Score">0%</span>
+            </div>
+            <h3 class="pillar-title">R/F-Diagnostik & Skalenniveaus</h3>
+            <p class="pillar-desc">
+              Präzise „Weil“-Begründungen bei den 14 Original-R/F-Aussagen (Üb 3.1 & Tut 3.3), 5 Skalenniveau-Prüfungen & 9 Backhaus-Geschäftstypen.
+            </p>
+          </div>
+          <div>
+            <div class="progress-track">
+              <div class="progress-fill" id="pillar3Bar" style="width: 0%"></div>
+            </div>
+            <div class="pillar-footer">
+              <span class="tabular-nums" id="pillar3Detail">0 / 28 Diagnosen gemeistert</span>
+              <button type="button" class="link-btn" data-goto-tab="diagnostic">R/F-Trainer starten →</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Main Cockpit Split: Left = Current Week Spotlight | Right = Blurting & Session Studio -->
+      <div class="cockpit-split">
+        <!-- Left Column: Active Week Focus & Quick Tasks -->
+        <div class="surface-card">
+          <div class="surface-card-header">
+            <div class="surface-card-title">
+              <span>🎯 Aktueller Fokus-Block laut Zeitplan</span>
+            </div>
+            <span class="cue-tag-pill" id="activeWeekDateBadge">09.11. – 15.11.2026</span>
+          </div>
+
+          <div id="cockpitActiveWeekContainer"></div>
+
+          <div class="surface-card-header" style="margin-top: 1.35rem;">
+            <div class="surface-card-title">
+              <span>⏱ Klausur-Pacing-Architektur (60 Punkte = 60 Minuten)</span>
+            </div>
+            <span class="brand-badge">1 Punkt = 1 Minute</span>
+          </div>
+          <div class="golden-rules-list">
+            <div class="rule-item">
+              <div>
+                <strong>Säule 1 · Begriffs-, System- & Kurzfall-Aufgaben (~27 Min. / 45%):</strong>
+                Präzise Definitionen nach Homburg (2020), Ursache-Wirkungs-Ketten (z.B. C/D-Paradigma, 5 GAPs, S-O-R) und strukturierte Vor-/Nachteils-Tabellen ohne unstrukturiertes Schwafeln.
+              </div>
+            </div>
+            <div class="rule-item" style="border-left-color: var(--emerald-400);">
+              <div>
+                <strong>Säule 2 · Quantitative Aufgaben (~21 Min. / 35%):</strong>
+                Strikter <strong>3-Schritt-Klausurstandard</strong>: (1) Allgemeine Formel hinschreiben → (2) Werte einsetzen & auf 2 Nachkommastellen runden → (3) Expliziter ökonomischer Interpretationssatz!
+              </div>
+            </div>
+            <div class="rule-item" style="border-left-color: var(--rose-400);">
+              <div>
+                <strong>Säule 3 · Richtig/Falsch & Methodik (~12 Min. / 20%):</strong>
+                Volle Punktzahl gibt es nur für das korrekte Urteil <em>plus</em> die exakte methodische Korrektur des fehlerhaften Begriffs (z.B. Reliabilität vs. Validität, Korrelation vs. Kausalität).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: 3-Minuten Blurting Studio & Deep Work Logger -->
+        <div class="surface-card">
+          <div class="surface-card-header">
+            <div class="surface-card-title">
+              <span>🧠 2-Schichten-Abruf-Studio (Freestyle Blurting)</span>
+            </div>
+            <span class="brand-badge">Justin Sung Methode</span>
+          </div>
+
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.85rem;">
+            <strong>Goldene Regel vor jeder Lernsession:</strong> Bevor du deine RemNote-Queue öffnest, wähle ein Teilkapitel und schreibe <strong>3 Minuten lang komplett frei</strong> alles auf, was du noch über die Struktur, Pfeile und Formeln weißt.
+          </p>
+
+          <div class="timer-studio-box">
+            <div class="timer-display-row">
+              <div>
+                <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.2rem;">
+                  Session-Timer (3 Min. Blurting / 45 Min. Deep Work)
+                </div>
+                <div class="timer-clock tabular-nums" id="studioTimerDisplay">03:00</div>
+              </div>
+              <div class="timer-controls">
+                <button type="button" class="btn btn-primary" id="timerStartPauseBtn">▶ Start</button>
+                <button type="button" class="btn btn-secondary" id="timerMode3MinBtn">3 Min. Blurting</button>
+                <button type="button" class="btn btn-secondary" id="timerMode45MinBtn">45 Min. Block</button>
+                <button type="button" class="btn btn-secondary" id="timerResetBtn">↺</button>
+              </div>
+            </div>
+
+            <textarea
+              id="blurtingScratchpad"
+              class="blurting-textarea"
+              placeholder="3-Minuten Brain-Dump hier starten (z.B. Kap. 5.2 Preispolitik: 3 PAF-Formen, Elastizität ε = x'(p)·p/x, Amoroso-Robinson, Cournot-Preis, Skimming vs. Penetration)..."
+            ></textarea>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="tabular-nums" style="font-size: 0.76rem; color: var(--text-muted);" id="sessionCounterText">
+                Absolvierte Deep-Work-Sessions: 0 (Ziel: 2–3 / Woche)
+              </span>
+              <div style="display: flex; gap: 0.45rem;">
+                <button type="button" class="btn btn-emerald" id="logSessionBtn">+1 Session loggen (2h)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="surface-card-header" style="margin-top: 1.15rem;">
+            <div class="surface-card-title">
+              <span>🛡 Anti-Illusions-Leitplanken (Kein passives Abschreiben!)</span>
+            </div>
+          </div>
+          <div class="golden-rules-list">
+            <div class="rule-item">
+              <div>
+                <strong>1. Die „Hand-Write“-Regel für RemNote:</strong>
+                Tippe niemals eine Karte ab, während die Vorlesungsfolie offen daneben liegt! Abschnitt lesen → verstehen → Folie ausblenden → aus dem Kopf formulieren.
+              </div>
+            </div>
+            <div class="rule-item">
+              <div>
+                <strong>2. Grouped Chunking statt Monster-Listen:</strong>
+                Keine Liste mit mehr als 4 Punkten ohne Zwischen-Cluster lernen! Immer die Cue-Zahl im Prompt verankern (z.B. <code>[5 in 3 Clustern]</code> oder <code>[10 in 3-3-4 Phasen]</code>).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 2: 6-WOCHEN-MASTERPLAN & 4-STEP PIPELINE
+         ====================================================================== -->
+    <section id="view-masterplan" class="view-section" role="tabpanel">
+      <div class="section-hero">
+        <div class="section-hero-left">
+          <div class="eyebrow">● 6-BLÖCKE-MASTERPLAN (09.11. – 18.12.2026)</div>
+          <h2>Wochen-Tracker & 4-Step Justin Sung Pipeline</h2>
+          <p>
+            Jeder Studienblock durchläuft verbindlich die 4-stufige Lern-Pipeline:
+            <strong>[1] Scoping & Priming</strong> → <strong>[2] 1-Seiten-Mindmap</strong> →
+            <strong>[3] Higher-Order RemNote</strong> → <strong>[4] Immediate Application</strong>.
+            Klicke direkt auf die PDF-Chips, um Vorlesungen, Übungen, Tutorien und Kernlösungen zu öffnen.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-secondary" id="expandAllBlocksBtn">Alle aufklappen</button>
+          <button type="button" class="btn btn-secondary" id="collapseAllBlocksBtn">Alle einklappen</button>
+        </div>
+      </div>
+
+      <div id="masterplanBlocksContainer" class="blocks-timeline"></div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 3: QUANT-LABOR & FORMEL-MASTERY MATRIX (SÄULE 2 · 35%)
+         ====================================================================== -->
+    <section id="view-quant" class="view-section" role="tabpanel">
+      <div class="section-hero">
+        <div class="section-hero-left">
+          <div class="eyebrow">● SÄULE 2 (35% GEWICHTUNG) · QUANT-DRILL & FORMEL-MASTERY</div>
+          <h2>Quant-Labor: Alle 11 Rechenarchetypen & Musterlösungen</h2>
+          <p>
+            Für die <strong>1,0</strong> musst du jeden dieser 11 Aufgabentypen auf den Status
+            <strong>„Blind auf Zeit gelöst“</strong> bringen. Nutze den integrierten Speed-Drill-Timer, den interaktiven Formel-Rechner und prüfe jede Lösung gegen den 3-Schritt-Klausurstandard.
+          </p>
+        </div>
+        <div class="timer-controls">
+          <div class="countdown-card" style="padding: 0.4rem 0.85rem;">
+            <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 700;">DRILL-STOPPUHR:</span>
+            <span class="countdown-number tabular-nums" id="quantStopwatchDisplay" style="color: var(--emerald-400); font-size: 1.2rem;">00:00</span>
+            <button type="button" class="btn btn-emerald" id="quantSwToggleBtn" style="padding: 0.28rem 0.65rem;">Start</button>
+            <button type="button" class="btn btn-secondary" id="quantSwResetBtn" style="padding: 0.28rem 0.55rem;">↺</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-Schritt-Klausurstandard Banner -->
+      <div class="klausurstandard-banner" style="margin-bottom: 1.4rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary);">
+            ✓ Der verbindliche 3-Schritt-Klausurstandard (Verhindert Teilpunktverluste in der Korrektur!)
+          </h3>
+          <span class="cue-tag-pill">Bei JEDER Rechenaufgabe abrufen</span>
+        </div>
+        <div class="standard-steps-row">
+          <div class="standard-step-pill">
+            <strong>SCHRITT 1 · ALLGEMEINE FORMEL</strong>
+            Immer zuerst die allgemeine Formel (z.B. Amoroso-Robinson, Regressionssteigung <em>b</em>, Varianz <em>s²</em>) sauber anschreiben — sichert Folgefehler-Punkte!
+          </div>
+          <div class="standard-step-pill">
+            <strong>SCHRITT 2 · WERTE & RUNDUNG</strong>
+            Zwischenschritte transparent einsetzen und das Endergebnis sauber auf 2 Nachkommastellen runden (inkl. korrekter Einheit wie €, Stück oder %).
+          </div>
+          <div class="standard-step-pill">
+            <strong>SCHRITT 3 · INTERPRETATIONSSATZ</strong>
+            Niemals eine nackte Zahl stehen lassen! Immer einen expliziten ökonomischen Antwortsatz schreiben (z.B. „74,9% der Varianz von y werden durch x erklärt“).
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Live Formula Sandbox Calculator -->
+      <div class="calculator-sandbox">
+        <div class="surface-card-header" style="margin-bottom: 0.85rem;">
+          <div class="surface-card-title">
+            <span>⚡ Interaktiver Klausur-Formel-Rechner (Live-Sandbox zum Nachrechnen & Variieren)</span>
+          </div>
+          <div class="calc-tabs" style="margin-bottom: 0;">
+            <button type="button" class="calc-tab-btn active" data-calc="cournot">1 · PAF, Cournot & Amoroso-Robinson</button>
+            <button type="button" class="calc-tab-btn" data-calc="advertising">2 · AKKUrat Werbebudget (W^0,5 & ln)</button>
+            <button type="button" class="calc-tab-btn" data-calc="harris">3 · Harris-Wilson Bestellmenge</button>
+            <button type="button" class="calc-tab-btn" data-calc="experience">4 · Erfahrungskurve K(x)</button>
+          </div>
+        </div>
+        <div id="liveCalcBody"></div>
+      </div>
+
+      <!-- All 11 Quant Archetypes List -->
+      <div id="quantDrillsContainer" class="quant-cards-list"></div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 4: R/F-DIAGNOSTIK & SKALENNIVEAU-LABOR (SÄULE 3 · 20%)
+         ====================================================================== -->
+    <section id="view-diagnostic" class="view-section" role="tabpanel">
+      <div class="section-hero">
+        <div class="section-hero-left">
+          <div class="eyebrow">● SÄULE 3 (20% GEWICHTUNG) · METHODISCHE PRÄZISION & R/F-FALLEN</div>
+          <h2>Richtig/Falsch-Diagnostik, Skalenniveaus & Geschäftstypen</h2>
+          <p>
+            Trainiere alle 14 Original-Aussagen aus <strong>Übung 3.1</strong> und <strong>Tutorium 3.3</strong>,
+            die 5 Skalenniveau-Klassifikationen aus <strong>Tutorium 3.1</strong> sowie die 9 B2B-Geschäftstypen nach Backhaus aus <strong>Übung 6.1.3</strong>.
+            Entscheide dich erst für eine Antwort und prüfe dann deine „Weil“-Begründung!
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-secondary" id="revealAllRfBtn">Alle Lösungen aufdecken</button>
+          <button type="button" class="btn btn-secondary" id="hideAllRfBtn">Quiz-Modus zurücksetzen</button>
+        </div>
+      </div>
+
+      <!-- Part A: 14 Richtig/Falsch Statements -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.6rem;">
+        <span>A · Die 14 Original Richtig/Falsch-Aussagen (Übung 3.1 & Tutorium 3.3)</span>
+        <span class="cue-tag-pill" id="rfProgressBadge">0 / 14 gemeistert</span>
+      </h3>
+      <div id="rfCardsContainer" class="rf-cards-grid"></div>
+
+      <!-- Part B: Skalenniveau-Trainer (Tutorium 3.1) -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.8rem 0 0.9rem; display: flex; align-items: center; gap: 0.6rem;">
+        <span>B · Skalenniveau-Klassifikator (Tutorium 2 · Aufgabe 3.1)</span>
+        <span class="cue-tag-pill" id="scalesProgressBadge">0 / 5 gemeistert</span>
+      </h3>
+      <div id="scalesContainer" class="rf-cards-grid"></div>
+
+      <!-- Part C: Backhaus 4 Geschäftstypen-Trainer (Übung 6.1.3) -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.8rem 0 0.9rem; display: flex; align-items: center; gap: 0.6rem;">
+        <span>C · Industriegütermarketing: 4 Geschäftstypen nach Backhaus (Übung 11 · Aufgabe 6.1.3)</span>
+        <span class="cue-tag-pill" id="backhausProgressBadge">0 / 9 gemeistert</span>
+      </h3>
+      <div id="backhausContainer" class="rf-cards-grid"></div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 5: GROUPED-CHUNKING & CASE-STUDY-TRESOR (SÄULE 1 · 45%)
+         ====================================================================== -->
+    <section id="view-vault" class="view-section" role="tabpanel">
+      <div class="section-hero">
+        <div class="section-hero-left">
+          <div class="eyebrow">● SÄULE 1 (45% GEWICHTUNG) · KONZEPTIONELLES SYSTEMWISSEN & CASE-TRANSFER</div>
+          <h2>Grouped-Chunking-Tresor & Case-Study-Matrizen</h2>
+          <p>
+            Aktiver Abruf (Active Recall) für alle mehrteiligen Konzepte mit strukturierter <strong>Cluster-Cue-Zahl</strong>
+            sowie die vollständigen Transfer-Matrizen (Problem → Modell-Diagnose → Maßnahme → Trade-off) für sämtliche Fallstudien aus Übung und Tutorium.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-primary" id="blurAllChunksBtn">🔒 Alle Cluster verdecken (Blurting-Test)</button>
+          <button type="button" class="btn btn-secondary" id="unblurAllChunksBtn">🔓 Alle Cluster aufdecken</button>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.9rem;">
+        1 · Grouped-Chunking Active-Recall Karten (Klicke auf ein verdecktes Cluster zum Aufdecken)
+      </h3>
+      <div id="groupedChunksContainer" class="chunks-grid"></div>
+
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.9rem;">
+        2 · Case-Study-Transfer-Matrizen (Alle Fallstudien des Semesters auf 1,0-Niveau)
+      </h3>
+      <div id="caseStudiesContainer" class="cases-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       BACKUP / EXPORT / IMPORT MODAL
+       ======================================================================== -->
+  <div class="modal-backdrop" id="backupModal" role="dialog" aria-modal="true" aria-labelledby="backupModalTitle">
+    <div class="modal-panel">
+      <div class="surface-card-header">
+        <h3 id="backupModalTitle" class="surface-card-title">⇄ Fortschritt sichern & wiederherstellen</h3>
+        <button type="button" class="icon-btn" id="closeBackupModalBtn">✕ Schließen</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        Dein gesamter Lernfortschritt wird automatisch im Browser (<code>localStorage</code>) gespeichert.
+        Hier kannst du zusätzlich ein JSON-Backup herunterladen oder wieder einspielen.
+      </p>
+      <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 1rem;">
+        <button type="button" class="btn btn-primary" id="exportJsonBtn">⬇ JSON-Backup herunterladen</button>
+        <label class="btn btn-secondary" style="cursor: pointer;">
+          ⬆ JSON-Backup importieren
+          <input type="file" id="importJsonInput" accept=".json,application/json" style="display: none;" />
+        </label>
+        <button type="button" class="btn btn-secondary" id="resetAllProgressBtn" style="color: var(--rose-400); border-color: var(--rose-border);">
+          ⚠ Fortschritt zurücksetzen
+        </button>
+      </div>
+      <textarea id="backupJsonPreview" class="blurting-textarea" readonly style="font-family: var(--font-mono); font-size: 0.72rem; min-height: 130px;"></textarea>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
